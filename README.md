@@ -3,15 +3,13 @@
 歌词是一种用来配合音乐咏唱的文学体裁，好的词作往往只用非常简短的语言就能描绘出丰富的情感。林夕是一位非常有才华的作词人，他善用细腻的描写和大量的修辞手法将深刻复杂、百转千回的情感刻画的入木三分，让人产生强烈的共鸣。而他从1985年开始尝试作词以来就非常高产，作品的质量也都非常高，比如《追》《春秋》《黑择明》《富士山下》《再见二丁目》等都是非常优秀的作品，所以我们试图训练一个Language model来模仿林夕的写作风格，产生新的歌词。
 
 程序可以在我的[github](https://github.com/dreasine/Lyrics_generator)上获得，语言模型的部分参考fukuball的project [Tom-Chang-Deep-Lyrics](https://github.com/fukuball/Tom-Chang-Deep-Lyrics)：Character-level language models for text generation based-on LSTM.
-
-模型结构如下：
+模型結構如下：
 ![](https://i.imgur.com/bdjW4vb.png)
 
-<!--more-->
 
 ## 爬取歌词
-首先寻找可以爬取的歌词语料，我选择了网易云上数量最多的林夕歌单，截止目前收录了3126首林夕的作品。
-使用活页夹里的get_lyrics.ipynb把歌单里的歌词爬取到一个文档里。
+首先寻找可以爬取的歌词语料，我选择了网易云上数量最多的[林夕歌单](https://music.163.com/#/playlist?id=63306090)，截止目前收录了3126首林夕的作品。
+使用文件夾里的get_lyrics.ipynb把歌单里的歌词爬取到一个文档里。
 ![](https://i.imgur.com/lEV3GIJ.png)
 
 

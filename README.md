@@ -1,43 +1,51 @@
 # 从零开始用深度学习生成林夕曲风的歌词
 
+歌词是一种用来配合音乐咏唱的文学体裁，好的词作往往只用非常简短的语言就能描绘出丰富的情感。林夕是一位非常有才华的作词人，他善用细腻的描写和大量的修辞手法将深刻复杂、百转千回的情感刻画的入木三分，让人产生强烈的共鸣。而他从1985年开始尝试作词以来就非常高产，作品的质量也都非常高，比如《追》《春秋》《黑择明》《富士山下》《再见二丁目》等都是非常优秀的作品，所以我们试图训练一个Language model来模仿林夕的写作风格，产生新的歌词。
 
-## 爬取歌詞
-首先尋找需要爬取的歌词语料，我选择了网易云上数量最多的林夕歌单，截止目前收录了3126首林夕的作品。
-使用文件夾裏的get_lyrics.ipynb把歌單裏的歌詞爬取到一個文檔裏。
+程序可以在我的[github](https://github.com/dreasine/Lyrics_generator)上获得，语言模型的部分参考fukuball的project [Tom-Chang-Deep-Lyrics](https://github.com/fukuball/Tom-Chang-Deep-Lyrics)：Character-level language models for text generation based-on LSTM.
+
+模型结构如下：
+![](https://i.imgur.com/bdjW4vb.png)
+
+<!--more-->
+
+## 爬取歌词
+首先寻找可以爬取的歌词语料，我选择了网易云上数量最多的林夕歌单，截止目前收录了3126首林夕的作品。
+使用活页夹里的get_lyrics.ipynb把歌单里的歌词爬取到一个文档里。
 ![](https://i.imgur.com/lEV3GIJ.png)
 
 
-## 數據預處理
-得到歌詞預料後需要對數據進行清洗，主要進行如下操作。
-* 簡繁轉換。（用OpenCC實現）
-```
-opencc -i lx_songlist_preprocess.txt -o lx_songlist_preprocess_zh.txt -c zht2zhs.ini
-```
-* 刪除作詞、作曲、演唱等雜訊。
-* 刪除文本中的空行。
+## 数据预处理
+得到歌词预料后需要对数据进行清洗，主要进行如下操作。
+1. 简繁转换。（用OpenCC实现）
+     ```
+    opencc -i lx_songlist_preprocess.txt -o lx_songlist_preprocess_zh.txt -c zht2zhs.ini
+    ```
+1. 删除作词、作曲、演唱等噪声。
+1. 删除文本中的空行。
 
 
-處理後大約能得到923kB的corpus。
+处理后大约能得到923kB的corpus。
 
-## 對model進行訓練
-### 環境要求
+## 训练模型
+### 环境要求
 ```
 tensorflow==1.8.0
 ```
-使用github上的project [Tom-Chang-Deep-Lyrics](https://github.com/fukuball/Tom-Chang-Deep-Lyrics) 的model：Character-level language models for text generation based-on LSTM.
-Config.py裏可以調對應的參數。
+
+运行如下指令对model进行训练，Config.py里可以调整对应的参数。
 
 
 ```bash
 python train.py lyrics/lx_songlist_preprocess.txt
 ```
 
-## 生成歌詞
+## 生成歌词
 
-運行generate.ipynb，修改start_sentence就可以生成不同的歌詞。在writing文件夾裏有之前生成的樣例歌詞。以下是部分結果展示：
+运行generate.ipynb，修改start_sentence就可以生成不同的歌词。在writing活页夹里有之前生成的样例歌词。以下是部分结果展示：
 
 ### 如果
-先用“如果”開頭測試一下：
+先用“如果”开头测试一下：
 ```
 如果碰见我
 难道你 只需要一个
@@ -60,8 +68,8 @@ python train.py lyrics/lx_songlist_preprocess.txt
 我的情人 
 ```
 
-### 忘掉種過的花
-然後用黃偉文熟悉的作品《喜帖街》的第一句歌詞作爲開頭測試，看是否會有不一樣的感覺：
+### 忘掉种过的花
+然后用黄伟文熟悉的作品《喜帖街》第一句歌词作为开头测试，看是否会有不一样的感觉：
 ```
 忘掉种过的花
 你的爱还是始终
@@ -82,7 +90,7 @@ python train.py lyrics/lx_songlist_preprocess.txt
 ```
 
 ### 生似蜉蝣
-最後用林夕自己的作品裏的一句話
+最后用林夕自己的作品《阿猫阿狗》里的一句话：
 ```
 生似蜉蝣
 只想你幸福不担心的经过
@@ -108,4 +116,5 @@ python train.py lyrics/lx_songlist_preprocess.txt
 流过的泪水 把你的问性
 ```
 
-可以看出還是會有一些重復，語義不詳，或是直接使用大段現有歌詞文本的情況出現，可能還是因爲data不夠多的問題，本來考慮用林夕的書來作爲補充語料pretrain，後來發現林夕文章的風格和詞作的差異太大效果反而不好，遂放棄。之後可能會試試其他風格較明顯的樂隊的詞作來看看是否能生成文風之間的區別，比如五月天或蘇打綠，還可以嘗試加入一些詩詞的語料作爲輔助。
+可以看出还是会有一些重复，语义不详，或是直接使用大段现有歌词文本的情况出现，可能还是因为data不够多的问题，本来考虑用林夕的书来作为补充语料pretrain，后来发现林夕文章的风格和词作的差异太大效果反而不好，遂放弃。之后可能会试试其他风格较明显的词作来看看是否能生成文风之间的区别，比如黄伟文、五月天或苏打绿，还可以尝试加入一些诗词的语料作为辅助。
+
